@@ -1,0 +1,46 @@
+version: "3.4"
+services:
+  mysqlHost:
+    image: mysql:8
+    container_name: mysqlHost
+    stdin_open: true
+    ports:
+      - 3306:3306
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - test-mysqldata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_USER: $MYSQL_USERNAME
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+  mongoHost:
+    image: mongo:4
+    container_name: mongoHost
+    stdin_open: true
+    ports:
+      - 27017:27017
+    volumes:
+      - test-mongodata:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_ROOT_PASSWORD
+      MONGO_INITDB_DATABASE: $MONGO_DATABASE
+  redisHost:
+    image: redis:6
+    container_name: redisHost
+    stdin_open: true
+    ports:
+      - 6379:6379
+    # command: ['--requirepass "password"']
+    command: redis-server --requirepass password
+    volumes:
+      - test-redisdata:/var/lib/redis
+volumes:
+  test-redisdata:
+  test-mysqldata:
+  test-mongodata:
+networks:
+  default:
+    external:
+      name: test-network
