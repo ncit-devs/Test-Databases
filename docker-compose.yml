@@ -4,6 +4,7 @@ services:
     image: mysql:8
     container_name: mysqlHost
     stdin_open: true
+    restart: unless-stopped
     ports:
       - 3306:3306
     command: --default-authentication-plugin=mysql_native_password
@@ -14,6 +15,36 @@ services:
       MYSQL_USER: $MYSQL_USERNAME
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DATABASE: $MYSQL_DATABASE
+
+  mssqlHost:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssqlHost
+    stdin_open: true
+    restart: unless-stopped
+    ports:
+      - 1433:1433
+    command: redis-server --requirepass password
+    volumes:
+      - test-redisdata:/var/lib/redis
+    environment:
+      MSSQL_HOST: $MSSQL_HOST
+      MSSQL_USERNAME: $MSSQL_USERNAME
+      MSSQL_PASSWORD: $MSSQL_PASSWORD
+      MSSQL_DATABASE: $MSSQL_DATABASE
+
+  pgHost:
+    image: postgres:14.1-alpine
+    container_name: pgHost
+    stdin_open: true
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - test-pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=POSTGRES_USER
+      - POSTGRES_PASSWORD=POSTGRES_PASSWORD
+
   mongoHost:
     image: mongo:4
     container_name: mongoHost
@@ -26,9 +57,11 @@ services:
       MONGO_INITDB_ROOT_USERNAME: $MONGO_ROOT_USERNAME
       MONGO_INITDB_ROOT_PASSWORD: $MONGO_ROOT_PASSWORD
       MONGO_INITDB_DATABASE: $MONGO_DATABASE
+
   redisHost:
     image: redis:6
     container_name: redisHost
+    restart: unless-stopped
     stdin_open: true
     ports:
       - 6379:6379
@@ -36,10 +69,13 @@ services:
     command: redis-server --requirepass password
     volumes:
       - test-redisdata:/var/lib/redis
+
 volumes:
   test-redisdata:
   test-mysqldata:
   test-mongodata:
+  test-pgdata:
+
 networks:
   default:
     external:
