@@ -16,18 +16,18 @@ services:
       MYSQL_PASSWORD: $MYSQL_PASSWORD
       MYSQL_DATABASE: $MYSQL_DATABASE
 
-  # mssqlHost:
-  #   image: mcr.microsoft.com/mssql/server:2019-latest
-  #   container_name: mssqlHost
-  #   stdin_open: true
-  #   restart: unless-stopped
-  #   ports:
-  #     - 1433:1433
-  #   environment:
-  #     MSSQL_HOST: $MSSQL_HOST
-  #     MSSQL_USERNAME: $MSSQL_USERNAME
-  #     MSSQL_PASSWORD: $MSSQL_PASSWORD
-  #     MSSQL_DATABASE: $MSSQL_DATABASE
+  mssqlHost:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssqlHost
+    stdin_open: true
+    restart: unless-stopped
+    ports:
+      - 1433:1433
+    volumes:
+      - test-mssqldata:/var/lib/mssqlql/data
+    environment:
+      ACCEPT_EULA: $ACCEPT_EULA
+      SA_PASSWORD: $SA_PASSWORD
 
   pgHost:
     image: postgres:14.1-alpine
@@ -69,10 +69,11 @@ services:
       - test-redisdata:/var/lib/redis
 
 volumes:
-  test-redisdata:
   test-mysqldata:
-  test-mongodata:
+  test-mssqldata:
   test-pgdata:
+  test-mongodata:
+  test-redisdata:
 
 networks:
   default:

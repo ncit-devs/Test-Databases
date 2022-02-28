@@ -16,5 +16,13 @@ redis-logs:
 recreate:
 	docker-compose up -d --force-recreate
 #-------------bash and sh---------------------------------
-bash:
-	docker-compose exec test_mysql bash
+bash-mssql:
+	docker-compose exec mssqlHost bash
+bash-mysql:
+	docker-compose exec mysqlHost bash
+bash-pg:
+	docker-compose exec pgHost bash
+bash-mongo:
+	docker-compose exec mongoHost bash
+bash-redis:
+	docker-compose exec redisHost bash
