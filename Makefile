@@ -18,13 +18,13 @@ recreate:
 
 #-------------MYSQL-----------------------------
 mysql-up:
-	docker-compose up -d mssqlHost
+	docker-compose up -d mysqlHost
 
 mysql-ps:
 	docker-compose ps
 
 mysql-bash:
-	docker-compose exec mssqlHost bash
+	docker-compose exec mysqlHost bash
 
 #-------------PG-----------------------------
 bash-pg:
